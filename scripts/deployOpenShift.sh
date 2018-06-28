@@ -100,7 +100,7 @@ do
 $MASTER-$c openshift_node_labels=\"{'region': 'master', 'zone': 'default'}\" openshift_hostname=$MASTER-$c"
 done
 
-# Create Infra nodes grouping 
+# Create Infra nodes grouping
 echo $(date) " - Creating Infra nodes grouping"
 
 for (( c=0; c<$INFRACOUNT; c++ ))
@@ -307,9 +307,9 @@ then
 	   echo $(date) "- Cloud Provider setup of master config on Master Nodes failed to completed"
 	   exit 7
 	fi
-	
+
 	echo $(date) "- Sleep for 60"
-	
+
 	sleep 60
 	runuser $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/setup-azure-node-master-origin.yaml"
 
@@ -320,9 +320,9 @@ then
 	   echo $(date) "- Cloud Provider setup of node config on Master Nodes failed to completed"
 	   exit 8
 	fi
-	
+
 	echo $(date) "- Sleep for 60"
-	
+
 	sleep 60
 	runuser $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/setup-azure-node-origin.yaml"
 
@@ -333,11 +333,11 @@ then
 	   echo $(date) "- Cloud Provider setup of node config on App Nodes failed to completed"
 	   exit 9
 	fi
-	
+
 	echo $(date) "- Sleep for 120"
-	
+
 	sleep 120
-	
+
 	echo $(date) " - Rebooting cluster to complete installation"
 	runuser -l $SUDOUSER -c  "oc label --overwrite nodes $MASTER-0 openshift-infra=apiserver"
 	runuser -l $SUDOUSER -c  "oc label --overwrite nodes --all logging-infra-fluentd=true logging=true"
@@ -355,27 +355,27 @@ then
 	   echo $(date) "- Cloud Provider setup did not complete"
 	   exit 10
 	fi
-	
+
 	# Create Storage Class
 	echo $(date) "- Creating Storage Class"
 
 	runuser $SUDOUSER -c "ansible-playbook -f 10 ~/openshift-container-platform-playbooks/configurestorageclass.yaml"
 	echo $(date) "- Sleep for 15"
 	sleep 15
-	
+
 	# Installing Service Catalog, Ansible Service Broker and Template Service Broker
-	
-	echo $(date) "- Installing Service Catalog, Ansible Service Broker and Template Service Broker"
-	runuser -l $SUDOUSER -c "ansible-playbook -f 10 /home/$SUDOUSER/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
-	echo $(date) "- Service Catalog, Ansible Service Broker and Template Service Broker installed successfully"
-	
+
+	# echo $(date) "- Installing Service Catalog, Ansible Service Broker and Template Service Broker"
+	# runuser -l $SUDOUSER -c "ansible-playbook -f 10 /home/$SUDOUSER/openshift-ansible/playbooks/openshift-service-catalog/config.yml"
+	# echo $(date) "- Service Catalog, Ansible Service Broker and Template Service Broker installed successfully"
+
 fi
 
 # Configure Metrics
 
 if [ $METRICS == "true" ]
 then
-	sleep 30	
+	sleep 30
 	echo $(date) "- Determining Origin version from rpm"
 	OO_VERSION="v"$(rpm -q origin | cut -d'-' -f 2 | head -c 3)
 	echo $(date) "- Deploying Metrics"
@@ -396,7 +396,7 @@ fi
 
 # Configure Logging
 
-if [ $LOGGING == "true" ] 
+if [ $LOGGING == "true" ]
 then
 	sleep 60
 	echo $(date) "- Deploying Logging"
